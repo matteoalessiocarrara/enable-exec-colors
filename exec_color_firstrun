@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+#  Copyright 2016 Matteo Alessio Carrara <sw.matteoac@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+
+# Stampa gli alias per tutti gli eseguibili del sistema
+
+
+
+TMPF=/tmp/exec_color_tmp
+
+echo > $TMPF || exit 1
+
+echo -e "MAN 1\n" 1>&2
+for p in $(apropos -s 1 . | cut -d ' ' -f1)
+do
+	echo $p 1>&2
+	[[ -z $(grep -E "^alias $p=" $TMPF) ]] && exec_color_alias $p >> $TMPF
+done
+
+echo -e "\n\nMAN 8\n" 1>&2
+for p in $(apropos -s 8 . | cut -d ' ' -f1)
+do
+	echo $p 1>&2
+	[[ -z $(grep -E "^alias $p=" $TMPF) ]] && exec_color_alias $p >> $TMPF
+done
+
+cat $TMPF
+rm $TMPF
